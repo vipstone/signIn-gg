@@ -1,19 +1,69 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-    <title></title>
-    <script src="js/mui.min.js"></script>
-    <link href="css/mui.min.css" rel="stylesheet"/>
-   
-</head>
-<body>
-	<div class="mui-content">
-		我是打卡页面
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			#map {
+				width: 100%;
+				height: 50%;
+				position: fixed;
+				top: 0px;
+				bottom: 0px;
+				line-height: 200px;
+				text-align: center;
+				background: #FFFFFF;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="map">
+			地图加载中...
 		</div>
-	 <script type="text/javascript" charset="utf-8">
-      	mui.init();
-    </script>
-</body>
+		<script type="text/javascript" charset="utf-8">
+			var em = null,
+				map = null;
+			// H5 plus事件处理
+			function plusReady() {
+				// 确保DOM解析完成
+				if (!em || !window.plus || map) {
+					return
+				};
+				setTimeout(function() {
+					map = new plus.maps.Map("map");
+					map.centerAndZoom(new plus.maps.Point(109.082848,34.399518), 15);
+					getUserLocation();
+				}, 300);
+			}
+			if (window.plus) {
+				plusReady();
+			} else {
+				document.addEventListener("plusready", plusReady, false);
+			}
+			// DOMContentloaded事件处理
+			document.addEventListener("DOMContentLoaded", function() {
+				em = document.getElementById("map");
+				plusReady();
+			}, false);
+			// 获取用户的当前位置信息
+			function getUserLocation() {
+				map.showUserLocation(true);
+				map.getUserLocation(function(state, point) {
+					if (0 == state) {
+						map.setCenter(point);
+					} else {
+						alert("位置信息获取失败!");
+					}
+				});
+			}
+
+			
+		</script>
+	</body>
+
 </html>

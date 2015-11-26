@@ -10,7 +10,7 @@
 		<style type="text/css">
 			#map {
 				width: 100%;
-				height: 50%;
+				height: 80%;
 				position: fixed;
 				top: 0px;
 				bottom: 0px;
@@ -18,12 +18,32 @@
 				text-align: center;
 				background: #FFFFFF;
 			}
+			
+			.buttonbox {
+				text-align: center;
+				width: 100%;
+				position: absolute;
+				bottom: 0px;
+				top: auto;
+				height: 20%;
+			}
+			
+			.buttonbox button {
+				width: 40%;
+				margin-top: 5%;
+				margin-left: 10px;
+				height: 60%;
+			}
 		</style>
 	</head>
 
 	<body>
 		<div id="map">
 			地图加载中...
+		</div>
+		<div id='buttonbox' class="buttonbox">
+			<button id="buttonSignIn" class="mui-btn mui-btn-primary" onclick="sign_In()">签到</button>
+			<button id="buttonSignOut" class="mui-btn mui-btn-danger" onclick="sign_Out()">签退</button>
 		</div>
 		<script type="text/javascript" charset="utf-8">
 			var em = null,
@@ -36,7 +56,7 @@
 				};
 				setTimeout(function() {
 					map = new plus.maps.Map("map");
-					map.centerAndZoom(new plus.maps.Point(109.082848,34.399518), 15);
+					map.centerAndZoom(new plus.maps.Point(109.082848, 34.399518), 15);
 					getUserLocation();
 				}, 300);
 			}
@@ -56,13 +76,12 @@
 				map.getUserLocation(function(state, point) {
 					if (0 == state) {
 						map.setCenter(point);
+						
 					} else {
 						alert("位置信息获取失败!");
 					}
 				});
 			}
-
-			
 		</script>
 	</body>
 

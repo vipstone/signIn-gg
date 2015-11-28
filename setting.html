@@ -1,18 +1,70 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-    <title></title>
-    <script src="js/mui.min.js"></script>
-    <link href="css/mui.min.css" rel="stylesheet"/>
-</head>
-<body>
-	<div class="mui-content">
-		我是设置页面
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style>
+			.mui-table-view {
+				margin-top: 20px;
+			}
+			
+			.item-value {
+				position: absolute;
+				right: 15px;
+				color: #999999;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-content">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">姓名<span class="item-value">王磊</span></li>
+				<li class="mui-table-view-cell">手机<span class="item-value">18049579804</span></li>
+				<li class="mui-table-view-cell">所属部门<span class="item-value">技术中心</span></li>
+			</ul>
+
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<a href="#lock" class="mui-navigate-right">修改密码</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="#lock" class="mui-navigate-right">关于</a>
+				</li>
+			</ul>
+
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" style="text-align: center;color:red;">
+					<a id='exit'>退出登录</a>
+				</li>
+			</ul>
 		</div>
-	 <script type="text/javascript" charset="utf-8">
-      	mui.init();
-    </script>
-</body>
+		<script type="text/javascript" charset="utf-8">
+			(function(mui, doc) {
+				mui.init();
+				mui.plusReady(function() {
+					doc.getElementById('exit').addEventListener('tap',
+						function() {
+							setTimeout(function() {
+								mui.openWindow({
+									url: 'login.html',
+									id: 'logout',
+									show: {
+										aniShow: 'pop-in'
+									},
+									waiting: {
+										autoShow: false
+									}
+								});
+							}, 0);
+						});
+				});
+			}(mui, document));
+		</script>
+	</body>
+
 </html>

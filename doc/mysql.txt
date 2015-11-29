@@ -1,0 +1,19 @@
+create table userinfo
+(
+id int AUTO_INCREMENT Primary Key,
+name nvarchar(20) not null,
+phone varchar(11) not null,
+password varchar(20) not null,
+job varchar(50) not null,
+createTime int not null
+);
+
+
+create table signinfo
+(
+id int AUTO_INCREMENT Primary Key,
+type smallint not null,
+uid int not null,
+createTime int not null,
+site nvarchar(50) not null
+);

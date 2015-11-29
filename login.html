@@ -87,10 +87,9 @@
 				</li>
 			</ul>
 
-			
 			<div class="mui-content-padded">
 				<button id='login' class="mui-btn mui-btn-block mui-btn-primary">登录</button>
-				<div class="link-area"><a id='forgetPassword'>忘记密码</a>
+				<div class="link-area" style="display: none;"><a id='forgetPassword'>忘记密码</a>
 				</div>
 			</div>
 
@@ -102,6 +101,7 @@
 				mui.plusReady(function() {
 					doc.getElementById('login').addEventListener('tap',
 						function() {
+							
 							setTimeout(function() {
 								mui.openWindow({
 									url: 'main.html',

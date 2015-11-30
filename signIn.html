@@ -42,8 +42,8 @@
 			地图加载中...
 		</div>
 		<div id='buttonbox' class="buttonbox">
-			<button id="buttonSignIn" class="mui-btn mui-btn-primary" onclick="sign_In()">签到</button>
-			<button id="buttonSignOut" class="mui-btn mui-btn-danger" onclick="sign_Out()">签退</button>
+			<button id="buttonSignIn" class="mui-btn mui-btn-primary" >签到</button>
+			<button id="buttonSignOut" class="mui-btn mui-btn-danger">签退</button>
 		</div>
 		<script type="text/javascript" charset="utf-8">
 			var em = null,
@@ -79,10 +79,14 @@
 						
 					} else {
 						mui.alert("位置信息获取失败!","系统提示");
-						//alert();
 					}
 				});
 			}
+			document.getElementById('buttonSignIn').addEventListener('tap',function(){
+				
+				
+			});
+			
 		</script>
 	</body>
 

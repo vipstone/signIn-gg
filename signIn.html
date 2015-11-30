@@ -42,9 +42,10 @@
 			地图加载中...
 		</div>
 		<div id='buttonbox' class="buttonbox">
-			<button id="buttonSignIn" class="mui-btn mui-btn-primary" >签到</button>
+			<button id="buttonSignIn" class="mui-btn mui-btn-primary">签到</button>
 			<button id="buttonSignOut" class="mui-btn mui-btn-danger">签退</button>
 		</div>
+		<script type="text/javascript" charset="utf-8" src="js/userUtil.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			var em = null,
 				map = null;
@@ -77,16 +78,48 @@
 					if (0 == state) {
 						map.setCenter(point);
 						
+						
 					} else {
-						mui.alert("位置信息获取失败!","系统提示");
+						mui.alert("位置信息获取失败!", "系统提示");
 					}
 				});
 			}
-			document.getElementById('buttonSignIn').addEventListener('tap',function(){
-				
-				
+			document.getElementById('buttonSignIn').addEventListener('tap', function() {
+				//TODO:签到
+				//addSignInfo(0);
+				getAddress();
 			});
-			
+
+			function addSignInfo(type) {
+				var userinfo = getUserInfo();
+				mui.ajax('http://029ps.com/sign.php', {
+					data: {
+						type: type,
+						uid: userinfo.id,
+						site: getAddress()
+					},
+					dataType: 'json',
+					type: 'post',
+					timeout: 20000, //超时时间设置为10秒；
+					success: function(data) {
+						console.log(JSON.stringify(data));
+					},
+					error: function(xhr, type, errorThrown) {
+						//异常处理；
+						alert(type);
+					}
+				});
+			}
+
+			function getAddress() {
+				//TODO:获取位置完善
+				plus.geolocation.getCurrentPosition(function(p) {
+					console.log(p.addresses);
+					//return p.addresses;
+				}, function(e) {
+					//return '未知位置';
+				});
+			}
 		</script>
 	</body>
 

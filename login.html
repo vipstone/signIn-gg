@@ -6,6 +6,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title>登录页面</title>
 		<script src="js/mui.min.js"></script>
+
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<style>
 			.area {
@@ -94,7 +95,7 @@
 			</div>
 
 		</div>
-
+		<script type="text/javascript" charset="utf-8" src="js/userUtil.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			(function(mui, doc) {
 				mui.init();
@@ -158,13 +159,6 @@
 						document.getElementById('phone').value = plus.storage.getItem(phoneStorageKey);
 						document.getElementById("setPhone").className += ' mui-active';
 					}
-				}
-				function setUserInfo(data){
-					plus.storage.setItem("id",data.id);
-					plus.storage.setItem("name",data.name);
-					plus.storage.setItem("phone",data.phone);
-					plus.storage.setItem("job",data.job);
-					plus.storage.setItem("createTime",data.createTime);
 				}
 			}(mui, document));
 		</script>

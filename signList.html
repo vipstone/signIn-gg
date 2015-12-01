@@ -22,7 +22,11 @@
 				</ul>
 			</div>
 		</div>
+		<script type="text/javascript" charset="utf-8" src="js/userUtil.js"></script>
+		<script type="text/javascript" charset="utf-8" src="js/timeUtil.js"></script>
 		<script>
+			var userInfo = null,
+				maxid = 0;
 			mui.init({
 				pullRefresh: {
 					container: '#pullrefresh',
@@ -35,54 +39,134 @@
 					}
 				}
 			});
+			mui.plusReady(function() {
+				userInfo = getUserInfo();
+			});
 			/**
 			 * 下拉刷新具体业务实现
 			 */
 			function pulldownRefresh() {
 				setTimeout(function() {
 					var table = document.body.querySelector('.mui-table-view');
-					var cells = document.body.querySelectorAll('.mui-table-view-cell');
-					//table.innerHTML = '';
-					for (var i = cells.length, len = i + 3; i < len; i++) {
-						var li = document.createElement('li');
-						li.className = 'mui-table-view-cell';
-						li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
-						//下拉刷新，新纪录插到最前面；
-						table.insertBefore(li, table.firstChild);
-					}
+					mui.ajax('http://029ps.com/signListByMaxId.php', {
+						data: {
+							uid: userInfo.id,
+							maxid: maxid
+						},
+						dataType: 'json',
+						type: 'get',
+						timeout: 20000, //超时时间设置为10秒；
+						success: function(data) {
+							if (data.data != '' && data.data.length > 0) {
+							for (var i = 0; i < data.data.length; i++) {
+								if (i == 0 && maxid < data.data[i].id) {
+									maxid = data.data[i].id;
+								}
+								createBeforeHtml(data.data[i]);
+							}
+						}
+						},
+						error: function(xhr, type, errorThrown) {
+							//异常处理；
+							mui.alert(type, '系统错误');
+						}
+					});
 					mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
-				}, 1500);
+				}, 300);
 			}
-			var count = 0;
+			var pIndex = 1;
 			/**
 			 * 上拉加载具体业务实现
 			 */
 			function pullupRefresh() {
-				setTimeout(function() {
-					mui('#pullrefresh').pullRefresh().endPullupToRefresh((++count > 2)); //参数为true代表没有更多数据了。
-					var table = document.body.querySelector('.mui-table-view');
-					var cells = document.body.querySelectorAll('.mui-table-view-cell');
-					for (var i = cells.length, len = i + 20; i < len; i++) {
-						var li = document.createElement('li');
-						li.className = 'mui-table-view-cell mui-media';
-						li.innerHTML = '<img class="mui-media-object mui-pull-right" src="images/ri.png"><div class="mui-media-body">2015-10-10 10:10:1' + (i + 1);
-						li.innerHTML+='<p class="mui-ellipsis">陕西省西安市国际港务区保税大厦税大厦税大厦</p></div></li>';
-						table.appendChild(li);
+				var maxCount = 0;
+				mui.ajax('http://029ps.com/signMaxPage.php', {
+					data: {
+						uid: userInfo.id
+					},
+					dataType: 'json',
+					type: 'get',
+					timeout: 20000, //超时时间设置为10秒；
+					success: function(data) {
+						if (data.data != '') {
+							setTimeout(function() {
+								mui('#pullrefresh').pullRefresh().endPullupToRefresh((pIndex > data.data)); //参数为true代表没有更多数据了。
+								bindData(pIndex);
+								pIndex++;
+							}, 300);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						//异常处理；
+						mui.alert(type, '系统错误');
 					}
-				}, 1500);
+				});
 			}
 			if (mui.os.plus) {
 				mui.plusReady(function() {
 					setTimeout(function() {
 						mui('#pullrefresh').pullRefresh().pullupLoading();
 					}, 1000);
-
 				});
 			} else {
 				mui.ready(function() {
 					mui('#pullrefresh').pullRefresh().pullupLoading();
 				});
 			}
+			// 绑定数据
+			function bindData(pIndex) {
+				mui.ajax('http://029ps.com/signListByPIndex.php', {
+					data: {
+						uid: userInfo.id,
+						pindex: pIndex
+					},
+					dataType: 'json',
+					type: 'get',
+					timeout: 20000, //超时时间设置为10秒；
+					success: function(data) {
+						if (data.data != '' && data.data.length > 0) {
+							for (var i = 0; i < data.data.length; i++) {
+								if (i == 0 && maxid < data.data[i].id) {
+									maxid = data.data[i].id;
+								}
+								createAppendHtml(data.data[i]);
+							}
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						//异常处理；
+						mui.alert(type, '系统错误');
+					}
+				});
+			}
+
+			function createAppendHtml(data) {
+				var table = document.body.querySelector('.mui-table-view');
+				var li = document.createElement('li');
+				li.className = 'mui-table-view-cell mui-media';
+				li.innerHTML = li.innerHTML = createHtml(data);;
+				table.appendChild(li);
+			}
+			function createBeforeHtml(data) {
+				var table = document.body.querySelector('.mui-table-view');
+				var li = document.createElement('li');
+				li.className = 'mui-table-view-cell mui-media';
+				li.innerHTML = createHtml(data);
+				table.insertBefore(li,table.firstChild);
+			}
+			function createHtml(data)
+			{
+				var html = '<img class="mui-media-object mui-pull-right" src="';
+				if (data.type == '0') {
+					html += 'images/ri.png">';
+				} else {
+					html += 'images/yue.png">';
+				}
+				html += '<div class="mui-media-body">' + dateFormat(data.createTime, 'yyyy-MM-dd hh:mm:ss');
+				html += '<p class="mui-ellipsis">' + data.site + '</p></div>';
+				return html;
+			}
+			
 		</script>
 	</body>
 

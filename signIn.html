@@ -51,17 +51,22 @@
 		<script type="text/javascript" charset="utf-8">
 			var em = null,
 				map = null,
-				addressKey = 'address',signInKey = 'signInDate',signOutKey='signOutDate';
+				userinfo = null,
+				addressKey = 'address',
+				signInKey = 'signInDate',
+				signOutKey = 'signOutDate';
 			// H5 plus事件处理 
 			function plusReady() {
 				// 确保DOM解析完成
 				if (!em || !window.plus || map) {
 					return
 				};
+				userinfo = getUserInfo();
 				setTimeout(function() {
 					map = new plus.maps.Map("map");
 					map.centerAndZoom(new plus.maps.Point(109.080369, 34.404343), 15);
 					getUserLocation();
+					
 				}, 300);
 			}
 			if (window.plus) {
@@ -78,6 +83,7 @@
 			function getUserLocation() {
 				map.showUserLocation(true);
 				map.getUserLocation(function(state, point) {
+					
 					if (0 == state) {
 						map.setCenter(point);
 						getAddress(point);
@@ -101,8 +107,7 @@
 				if (storageAddress) {
 					address = storageAddress;
 				}
-				var userinfo = getUserInfo();
-				mui.ajax('http://029ps.com/sign.php', {
+				mui.ajax('http://029ps.com/addSign.php', {
 					data: {
 						type: type,
 						uid: userinfo.id,
@@ -112,7 +117,7 @@
 					type: 'post',
 					timeout: 20000, //超时时间设置为10秒；
 					success: function(data) {
-						console.log(JSON.stringify(data));
+						alert("操作成功！");
 					},
 					error: function(xhr, type, errorThrown) {
 						//异常处理；
@@ -122,6 +127,7 @@
 			}
 
 			function getAddress(point) {
+				
 				//baidu逆地址解析
 				var bPoint = new BMap.Point(point.longitude, point.latitude);
 				var geoc = new BMap.Geocoder();
@@ -135,7 +141,6 @@
 					plus.storage.setItem(addressKey, address);
 				});
 			}
-			
 		</script>
 	</body>
 

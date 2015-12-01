@@ -47,21 +47,30 @@
 			(function(mui, doc) {
 				mui.init();
 				mui.plusReady(function() {
-					doc.getElementById('exit').addEventListener('tap',
-						function() {
-							setTimeout(function() {
-								mui.openWindow({
-									url: 'login.html',
-									id: 'logout',
-									show: {
-										aniShow: 'pop-in'
-									},
-									waiting: {
-										autoShow: false
-									}
-								});
-							}, 0);
+					doc.getElementById('exit').addEventListener('tap', function() {
+						plus.nativeUI.actionSheet({
+							buttons: [{
+								title: "退出"
+							}, {
+								title: "取消"
+							}]
+						}, function(e) {
+							if (e.index == 1) {
+								setTimeout(function() {
+									mui.openWindow({
+										url: 'login.html',
+										id: 'logout',
+										show: {
+											aniShow: 'pop-in'
+										},
+										waiting: {
+											autoShow: false
+										}
+									});
+								}, 0);
+							}
 						});
+					});
 				});
 			}(mui, document));
 		</script>

@@ -38,6 +38,7 @@
 	</head>
 
 	<body>
+
 		<div id="map">
 			地图加载中...
 		</div>
@@ -45,11 +46,13 @@
 			<button id="buttonSignIn" class="mui-btn mui-btn-primary">签到</button>
 			<button id="buttonSignOut" class="mui-btn mui-btn-danger">签退</button>
 		</div>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=KEDyLGcmebLyexZ3sx6h91YP"></script>
 		<script type="text/javascript" charset="utf-8" src="js/userUtil.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			var em = null,
-				map = null;
-			// H5 plus事件处理
+				map = null,
+				addressKey = 'address',signInKey = 'signInDate',signOutKey='signOutDate';
+			// H5 plus事件处理 
 			function plusReady() {
 				// 确保DOM解析完成
 				if (!em || !window.plus || map) {
@@ -57,7 +60,7 @@
 				};
 				setTimeout(function() {
 					map = new plus.maps.Map("map");
-					map.centerAndZoom(new plus.maps.Point(109.082848, 34.399518), 15);
+					map.centerAndZoom(new plus.maps.Point(109.080369, 34.404343), 15);
 					getUserLocation();
 				}, 300);
 			}
@@ -77,26 +80,33 @@
 				map.getUserLocation(function(state, point) {
 					if (0 == state) {
 						map.setCenter(point);
-						
-						
+						getAddress(point);
 					} else {
 						mui.alert("位置信息获取失败!", "系统提示");
 					}
 				});
 			}
+			// 签到
 			document.getElementById('buttonSignIn').addEventListener('tap', function() {
-				//TODO:签到
-				//addSignInfo(0);
-				getAddress();
+				addSignInfo(0);
 			});
-
+			// 签退
+			document.getElementById('buttonSignOut').addEventListener('tap', function() {
+				addSignInfo(1);
+			});
+			// 添加打卡信息
 			function addSignInfo(type) {
+				var address = "未知位置";
+				var storageAddress = plus.storage.getItem(addressKey);
+				if (storageAddress) {
+					address = storageAddress;
+				}
 				var userinfo = getUserInfo();
 				mui.ajax('http://029ps.com/sign.php', {
 					data: {
 						type: type,
 						uid: userinfo.id,
-						site: getAddress()
+						site: address
 					},
 					dataType: 'json',
 					type: 'post',
@@ -106,20 +116,26 @@
 					},
 					error: function(xhr, type, errorThrown) {
 						//异常处理；
-						alert(type);
+						mui.alert(type, '系统异常');
 					}
 				});
 			}
 
-			function getAddress() {
-				//TODO:获取位置完善
-				plus.geolocation.getCurrentPosition(function(p) {
-					console.log(p.addresses);
-					//return p.addresses;
-				}, function(e) {
-					//return '未知位置';
+			function getAddress(point) {
+				//baidu逆地址解析
+				var bPoint = new BMap.Point(point.longitude, point.latitude);
+				var geoc = new BMap.Geocoder();
+				geoc.getLocation(bPoint, function(rs) {
+					var address;
+					if (rs.surroundingPois != '') {
+						address = rs.surroundingPois[0].address; //100米内关键点
+					} else {
+						address = rs.address; //当前位置
+					}
+					plus.storage.setItem(addressKey, address);
 				});
 			}
+			
 		</script>
 	</body>
 

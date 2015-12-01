@@ -10,125 +10,61 @@
 	</head>
 
 	<body>
-			<ul class="mui-table-view">
-				
-				<li class="mui-table-view-cell mui-media">
-					<a href="#">
-						<img class="mui-media-object mui-pull-right" src="images/ri.png">
-						<div class="mui-media-body">
-							2015-11-10 08:49:15
-							<p class='mui-ellipsis'>陕西省西安市国际港务区保税大厦</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a href="#">
-						<img class="mui-media-object mui-pull-right" src="images/yue.png">
-						<div class="mui-media-body">
-							2015-11-10 18:04:15
-							<p class='mui-ellipsis'>陕西省西安市国际港务区保税大厦</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a href="#">
-						<img class="mui-media-object mui-pull-right" src="images/ri.png">
-						<div class="mui-media-body">
-							2015-11-11 08:49:15
-							<p class='mui-ellipsis'>陕西省西安市国际港务区保税大厦</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a href="#">
-						<img class="mui-media-object mui-pull-right" src="images/yue.png">
-						<div class="mui-media-body">
-							2015-11-11 18:04:15
-							<p class='mui-ellipsis'>陕西省西安市国际港务区保税大厦</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a href="#">
-						<img class="mui-media-object mui-pull-right" src="images/ri.png">
-						<div class="mui-media-body">
-							2015-11-12 08:49:15
-							<p class='mui-ellipsis'>陕西省西安市国际港务区保税大厦</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a href="#">
-						<img class="mui-media-object mui-pull-right" src="images/yue.png">
-						<div class="mui-media-body">
-							2015-11-12 18:04:15
-							<p class='mui-ellipsis'>陕西省西安市国际港务区保税大厦</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a href="#">
-						<img class="mui-media-object mui-pull-right" src="images/ri.png">
-						<div class="mui-media-body">
-							2015-11-13 08:49:15
-							<p class='mui-ellipsis'>陕西省西安市国际港务区保税大厦</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a href="#">
-						<img class="mui-media-object mui-pull-right" src="images/yue.png">
-						<div class="mui-media-body">
-							2015-11-13 18:04:15
-							<p class='mui-ellipsis'>陕西省西安市国际港务区保税大厦</p>
-						</div>
-					</a>
-				</li>
-			</ul>
+		
+		<ul class="mui-table-view" id='ul_data'>
 
-			<div class="mui-content-padded" style="text-align: center;width: 100%;">
-				<ul class="mui-pagination mui-pagination-lg">
-					<li class="mui-previous">
-						<a href="#">
-					&laquo;
-				</a>
-					</li>
-					<li class="mui-active">
-						<a href="#">
-					1
-				</a>
-					</li>
-					<li>
-						<a href="#">
-					2
-				</a>
-					</li>
-					<li>
-						<a href="#">
-					3
-				</a>
-					</li>
-					<li>
-						<a href="#">
-					4
-				</a>
-					</li>
-					<li>
-						<a href="#">
-					5
-				</a>
-					</li>
-					<li class="mui-next mui-disabled">
-						<a href="#">
-					&raquo;
-				</a>
-					</li>
-				</ul>
-			</div>
-	
+		</ul>
 
+		<script type="text/javascript" charset="utf-8" src="js/userUtil.js"></script>
+		<script type="text/javascript" charset="utf-8" src="js/timeUtil.js"></script>
 		<script type="text/javascript" charset="utf-8">
-			mui.init();
+			mui.init({
+				subpages: [{
+					url: 'sonContent.html', //下拉刷新内容页面地址
+					id: 'pullrefresh-subpage-id', //内容页面标志
+					styles: {
+						top: subpage - top - position //内容页面顶部位置,需根据实际页面布局计算，若使用标准mui导航，顶部默认为48px；
+					}
+				}]
+			});
+			mui.plusReady(function() {
+				/*var userInfo = getUserInfo();
+				mui.ajax('http://029ps.com/signlist.php', {
+					data: {
+						uid: userInfo.id,
+						a: new Date().getTime()
+					},
+					dataType: 'json',
+					type: 'get',
+					timeout: 20000, //超时时间设置为10秒；
+					success: function(data) {
+						if (data && data.length > 0) {
+							bindData(data);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						//异常处理；
+						alert(type);
+					}
+				});*/
+			});
+			// 绑定信息列表
+			function bindData(data) {
+				for (var i = 0; i < data.length; i++) {
+					document.getElementById('ul_data').innerHTML += createHtml(data[i]);
+				}
+			}
+			// 组织单条绑定数据
+			function createHtml(singleData) {
+				var html = '<li class="mui-table-view-cell mui-media"><img class="mui-media-object mui-pull-right" src="';
+				if (singleData.type == '0') {
+					html += 'images/ri.png">';
+				} else {
+					html += 'images/yue.png">';
+				}
+				html += '<div class="mui-media-body">' + dateFormat(singleData.createTime, 'yyyy-MM-dd hh:mm:ss') + '<p class="mui-ellipsis">' + singleData.site + '</p></div></li>';
+				return html;
+			}
 		</script>
 	</body>
 

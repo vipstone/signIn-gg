@@ -74,7 +74,7 @@
 				</div>
 				<div class="mui-input-row">
 					<label>密码</label>
-					<input id='password' type="password" class="mui-input-clear mui-input" value="123456" placeholder="请输入密码">
+					<input id='password' type="password" class="mui-input-clear mui-input" value="" placeholder="请输入密码">
 				</div>
 			</form>
 
@@ -107,14 +107,14 @@
 					doc.getElementById('login').addEventListener('tap', function() {
 						var w = plus.nativeUI.showWaiting("正在登录请稍等……");
 						var phone = doc.getElementById('phone');
-						mui.ajax('http://029ps.com/login.php', {
+						mui.ajax('http://apigo.cn/login.php', {
 							data: {
 								phone: phone.value,
 								pwd: doc.getElementById('password').value
 							}, 
 							dataType: 'json',
 							type: 'post',
-							timeout: 20000, //超时时间设置为10秒；
+							timeout: 20000, //超时时间设置为20秒；
 							success: function(data) {
 								w.close();
 								if (data.data) {

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			.mui-btn {
+				margin-top: 10px;
+				margin-bottom: 10px;
+				width: 100px;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">修改密码</h1>
+			</header>
+			<div class="mui-content">
+				<div class="mui-input-group">
+					<div class="mui-input-row">
+						<label>手机号</label>
+						<input id="phone" type="text" class="mui-input-clear" value="18049579804" disabled="disabled">
+					</div>
+
+					<div class="mui-input-row mui-plus-visible">
+						<label>密码</label>
+						<input id="i_pwd" class="mui-input-password" type="password" placeholder="请输入密码">
+					</div>
+					<div class="mui-input-row mui-plus-visible">
+						<label>确认密码</label>
+						<input id="i_pwd2" class="mui-input-password" type="password" placeholder="请输入确认密码">
+					</div>
+					<div class="mui-button-row" style="height: 70px;">
+						<button id="but_ok" type="button" class="mui-btn mui-btn-primary">确认</button>&nbsp;&nbsp;
+						<button id="but_cancel" type="button" class="mui-btn mui-btn-danger">取消</button>
+					</div>
+				</div>
+			</div>
+			<script src="js/userUtil.js" type="text/javascript" charset="utf-8"></script>
+			<script type="text/javascript" charset="utf-8">
+				mui.init();
+				var userInfo = null;
+				mui.plusReady(function() {
+					userInfo = getUserInfo();
+					var phone = document.getElementById('phone');
+					var pwd = document.getElementById('i_pwd');
+					var pwd2 = document.getElementById('i_pwd2');
+					phone.value = userInfo.phone;
+					document.getElementById('but_ok').addEventListener('tap', function() {
+						if (!pwd.value) {
+							mui.toast('请先输入密码！');
+							return;
+						}
+						if (!pwd2.value) {
+							mui.toast('请先输入确认密码！');
+							return;
+						}
+						if (pwd.value != pwd2.value) {
+							mui.toast('两次输入的密码不一致请重新输入！');
+							return;
+						}
+						mui.ajax('http://www.apigo.cn/setpwd.php', {
+							data: {
+								phone: phone.value,
+								pwd: pwd.value,
+								pwd2: pwd2.value
+							},
+							dataType: 'json',
+							type: 'post',
+							timeout: 1000 * 20,
+							success: successCallback,
+							error: function(xhr, type, errorThrown) {
+								//异常处理；
+								mui.alert(type, '系统错误');
+							}
+						});
+					});
+					document.getElementById('but_cancel').addEventListener('tap', function() {
+						mui.openWindow({
+							url: 'main.html',
+							id: 'main',
+							show: {
+								aniShow: 'pop-in'
+							},
+							styles: {
+								popGesture: 'hide'
+							},
+							waiting: {
+								autoShow: false
+							}
+						});
+					});
+				});
+
+				function successCallback(data) {
+					if (data.error == '') {
+						mui.alert('恭喜密码修改成功！', '系统提示');
+						document.getElementById('i_pwd').value = '';
+						document.getElementById('i_pwd2').value = '';
+					} else {
+						mui.alert(data.error, '系统提示');
+					}
+				}
+			</script>
+	</body>
+
+</html>

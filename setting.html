@@ -23,9 +23,9 @@
 	<body>
 		<div class="mui-content">
 			<ul class="mui-table-view">
-				<li class="mui-table-view-cell">姓名<span class="item-value">王磊</span></li>
-				<li class="mui-table-view-cell">手机<span class="item-value">18049579804</span></li>
-				<li class="mui-table-view-cell">所属部门<span class="item-value">技术中心</span></li>
+				<li class="mui-table-view-cell">姓名<span id="name" class="item-value">王磊</span></li>
+				<li class="mui-table-view-cell">手机<span id="phone" class="item-value">18049579804</span></li>
+				<li class="mui-table-view-cell">所属部门<span id="job" class="item-value">技术中心</span></li>
 			</ul>
 
 			<ul class="mui-table-view">
@@ -44,10 +44,16 @@
 			</ul>
 
 		</div>
+		<script src="js/userUtil.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript" charset="utf-8">
 			(function(mui, doc) {
+				var userInfo=null;
 				mui.init();
 				mui.plusReady(function() {
+					userInfo = getUserInfo();
+					doc.getElementById('name').value=userInfo.name;
+					doc.getElementById('phone').value=userInfo.phone;
+					doc.getElementById('job').value=userInfo.job;
 					doc.getElementById('exit').addEventListener('tap', function() {
 						plus.nativeUI.actionSheet({
 							buttons: [{

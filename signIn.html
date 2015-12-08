@@ -119,10 +119,10 @@
 					timeout: 20000, //超时时间设置为10秒；
 					success: function(data) {
 						if (type == 0) {
-							setSignIn();
+							plus.storage.setItem(signInKey, nowDate);
 							mui.alert("签到成功！","系统提示");
 						} else {
-							setSignOut();
+							plus.storage.setItem(signOutKey, nowDate);
 							mui.alert("签退成功！","系统提示");
 						}
 					},
@@ -158,14 +158,6 @@
 				if (plus.storage.getItem(signOutKey) != nowDate) {
 					document.getElementById('buttonSignOut').removeAttribute("disabled");
 				}
-			}
-
-			function setSignIn() {
-				plus.storage.setItem(signInKey, nowDate);
-			}
-
-			function setSignOut() {
-				plus.storage.setItem(signOutKey, nowDate);
 			}
 		</script>
 	</body>

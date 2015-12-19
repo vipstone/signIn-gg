@@ -38,7 +38,6 @@
 	</head>
 
 	<body>
-
 		<div id="map">
 			地图加载中...
 		</div>
@@ -46,7 +45,6 @@
 			<button id="buttonSignIn" class="mui-btn mui-btn-primary" disabled="disabled">签到</button>
 			<button id="buttonSignOut" class="mui-btn mui-btn-danger" disabled="disabled">签退</button>
 		</div>
-		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=KEDyLGcmebLyexZ3sx6h91YP"></script>
 		<script type="text/javascript" charset="utf-8" src="js/userUtil.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			var em = null,
@@ -133,16 +131,14 @@
 				});
 			}
 
-			function getCurrentPos() {
+			function getCurrentPos() { 
 				plus.geolocation.getCurrentPosition(setAddress, function(e) {
-					mui.alert("获取百度定位位置信息失败：" + e.message, "系统错误");
-				}, {
-					provider: 'baidu'
+					mui.alert("获取定位位置信息失败：" + e.message, "系统错误");
 				});
 			}
 
 			function setAddress(position) {
-				var address = position.addresses + position.address.poiName; //获取详细地址信息
+				var address = position.address.province+position.address.city+position.address.district+ position.addresses; //获取详细地址信息
 				plus.storage.setItem(addressKey, address);
 				isSignIn();
 				isSignOut();
@@ -155,7 +151,7 @@
 			}
 
 			function isSignOut() {
-				if (plus.storage.getItem(signOutKey) != nowDate) {
+				if (plus.storage.getItem(signOutKey) != nowDate) { 
 					document.getElementById('buttonSignOut').removeAttribute("disabled");
 				}
 			}
